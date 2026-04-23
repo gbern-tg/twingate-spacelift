@@ -1,18 +1,16 @@
 version: "2"
-
 stack_defaults:
   runner_image: gberntg/spacelift-twingate:latest
-
   before_init:
-    - echo "$TWINGATE_SERVICE_KEY" > /etc/twingate/service_key.json
-    - echo ">>> Service key written"
-    - echo ">>> Starting Twingate client (userspace mode, port 9999)..."
-    - twingated --http-proxy 0.0.0.0:9999 --tun off &
-    - sleep 15
-    - echo ">>> Twingate client started"
-    - echo ">>> Starting proxytunnel: localhost:5432 -> 127.0.0.1:9999 -> $DB_DEST"
-    - proxytunnel --standalone=5432 --proxy=127.0.0.1:9999 --dest=$DB_DEST &
-    - sleep 3
-    - echo ">>> proxytunnel started"
-    - echo ">>> Checking if tunnel is up..."
-    - pg_isready -h 127.0.0.1 -p 5432 && echo ">>> Tunnel is ready!" || echo ">>> Tunnel not ready yet (may need more time)"
+    - 'echo "$TWINGATE_SERVICE_KEY" > /etc/twingate/service_key.json'
+    - "echo >>> Service key written"
+    - "echo >>> Starting Twingate client..."
+    - "twingated --http-proxy 0.0.0.0:9999 --tun off &"
+    - "sleep 15"
+    - "echo >>> Twingate client started"
+    - "echo >>> Starting proxytunnel..."
+    - "proxytunnel --standalone=5432 --proxy=127.0.0.1:9999 --dest=$DB_DEST &"
+    - "sleep 3"
+    - "echo >>> proxytunnel started"
+    - "echo >>> Checking if tunnel is up..."
+    - "pg_isready -h 127.0.0.1 -p 5432 || echo tunnel not ready yet"
