@@ -2,7 +2,7 @@ version: "2"
 
 stack_defaults:
   # Your custom runner image from Step 1
-  runner_image: <your-dockerhub-username>/spacelift-twingate:latest
+  runner_image: gberntg/spacelift-twingate:latest
 
   before_init:
     # Write the service key from an env var to the file location Twingate expects
