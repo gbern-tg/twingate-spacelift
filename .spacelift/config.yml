@@ -7,7 +7,6 @@ stack_defaults:
   before_init:
     # Write the service key from an env var to the file location Twingate expects
     - |
-      mkdir -p /etc/twingate
       echo "$TWINGATE_SERVICE_KEY" > /etc/twingate/service_key.json
       echo ">>> Service key written"
 
@@ -15,12 +14,12 @@ stack_defaults:
     - |
       echo ">>> Starting Twingate client (userspace mode, port 9999)..."
       twingated --http-proxy 0.0.0.0:9999 --tun off &
-      sleep 10
+      sleep 15
       echo ">>> Twingate client started"
 
     # Start proxytunnel to bridge TCP 5432 through the HTTP proxy (background)
     - |
-      echo ">>> Starting proxytunnel: localhost:5432 → 127.0.0.1:9999 → $DB_DEST"
+      echo ">>> Starting proxytunnel: localhost:5432 -> 127.0.0.1:9999 -> $DB_DEST"
       proxytunnel --standalone=5432 --proxy=127.0.0.1:9999 --dest=$DB_DEST &
       sleep 3
       echo ">>> proxytunnel started"
